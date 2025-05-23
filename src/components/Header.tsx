@@ -1,21 +1,25 @@
-import {Button, Grid} from "@mui/material";
+import { AppBar, Button, Grid, Toolbar } from "@mui/material";
 
 const Header = () => {
   return (
-    <Grid container item justifyContent="center">
-      <Grid item>
-        <Button variant="text">Home</Button>
-      </Grid>
-      <Grid item>
-        <Button variant="text">About me</Button>
-      </Grid>
-      <Grid item>
-        <Button variant="text">Portfolio</Button>
-      </Grid>
-      <Grid item>
-        <Button variant="text">Contact</Button>
-      </Grid>
-    </Grid>
+    <AppBar>
+      <Toolbar>
+        <Grid container item justifyContent="center">
+          <Grid item>
+            <Button variant="text">Home</Button>
+          </Grid>
+          <Grid item>
+            <Button variant="text">About me</Button>
+          </Grid>
+          <Grid item>
+            <Button variant="text">Portfolio</Button>
+          </Grid>
+          <Grid item>
+            <Button variant="text">Contact</Button>
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
   );
 };
-export default Header
+export default Header;

@@ -59,7 +59,7 @@ const HorizontalScrollComponent = () => {
           <Typography variant="h1">Cat fact</Typography>
         </Grid>
         <Grid item textAlign="center">
-          <Button variant="container" onClick={handleClick}>
+          <Button variant="contained" onClick={handleClick}>
             Tell me a cat fact
           </Button>
         </Grid>

@@ -1,43 +1,1503 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Natayra Santos - Creative Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
+    <style>
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background-color: #000000; /* Black background */
+        color: #ffffff; /* White text */
+        overflow-x: hidden;
+      }
+      #cosmic-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .content-section {
+        position: relative;
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+      }
+      .hero-section {
+        background-color: rgba(0, 0, 0, 0.4);
+      }
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #111;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #555;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #777;
+      }
+
+      .line-drawing-button {
+        border: 1px solid #ffffff;
+        color: #ffffff;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 2;
+        background-color: transparent; /* Ensure transparent background for button */
+      }
+      .line-drawing-button:hover {
+        background-color: #ffffff;
+        color: #000000;
+      }
+      .project-card {
+        border: 1px solid #333;
+        transition: border-color 0.3s ease, transform 0.3s ease,
+          box-shadow 0.3s ease;
+        background-color: rgba(
+          0,
+          0,
+          0,
+          0.5
+        ); /* Slightly more opaque for cards */
+      }
+      .project-card:hover {
+        border-color: #ffffff;
+        transform: translateY(-5px);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+      }
+      .project-card img {
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        border-bottom: 1px solid #333;
+      }
+      .section-title-underline::after {
+        content: "";
+        display: block;
+        width: 50px;
+        height: 2px;
+        background-color: #ffffff;
+        margin-top: 8px;
+      }
+      .section-title-underline.mx-auto::after {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      /* Form styling */
+      .form-input {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid #555;
+        color: #ffffff;
+        border-radius: 0.25rem; /* Tailwind's rounded-md is 0.375rem, using slightly less */
+        padding: 0.75rem 1rem;
+        transition: border-color 0.3s ease;
+        width: 100%;
+      }
+      .form-input:focus {
+        outline: none;
+        border-color: #ffffff;
+      }
+      .form-textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+      .form-message {
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+        margin-top: 1rem;
+        text-align: center;
+      }
+      .form-message.success {
+        background-color: rgba(
+          74,
+          222,
+          128,
+          0.2
+        ); /* Tailwind green-500 with opacity */
+        color: #4ade80; /* Tailwind green-500 */
+        border: 1px solid #4ade80;
+      }
+      .form-message.error {
+        background-color: rgba(
+          248,
+          113,
+          113,
+          0.2
+        ); /* Tailwind red-500 with opacity */
+        color: #f87171; /* Tailwind red-500 */
+        border: 1px solid #f87171;
+      }
+    </style>
   </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  <body class="antialiased">
+    <canvas id="cosmic-canvas"></canvas>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    <section
+      class="hero-section min-h-screen flex flex-col items-center justify-center text-center p-6"
+    >
+      <div class="max-w-3xl">
+        <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold mb-4">
+          Natayra Santos
+        </h1>
+        <p class="text-xl sm:text-2xl md:text-3xl text-gray-300 mb-8">
+          Creative Developer | Zurich
+        </p>
+        <p class="text-lg text-gray-400 mb-10">
+          Crafting digital experiences where code meets creativity. Exploring
+          the cosmos of technology, one line at a time.
+        </p>
+        <a
+          href="https://www.linkedin.com/in/natayra"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="line-drawing-button py-3 px-8 rounded-sm text-lg font-medium"
+        >
+          Connect
+        </a>
+      </div>
+    </section>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <section id="about" class="content-section py-16 sm:py-24">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-2 section-title-underline">
+          About Me
+        </h2>
+        <p class="text-lg text-gray-300 leading-relaxed mb-6">
+          Hey! I'm Natayra, a Zurich-based developer with a passion for building
+          sleek, intuitive, and sometimes a bit "out there" web applications. I
+          thrive on challenges that blend technical precision with artistic
+          vision. My journey into development was fueled by a fascination with
+          how logic and design can intertwine to create something truly
+          impactful.
+        </p>
+        <p class="text-lg text-gray-300 leading-relaxed">
+          When I'm not coding, you might find me exploring new generative art
+          techniques, getting lost in a sci-fi novel, or searching for the
+          perfect espresso in the city. I believe in continuous learning and
+          always pushing the boundaries of what's possible.
+        </p>
+      </div>
+    </section>
+
+    <section id="projects" class="content-section py-16 sm:py-24">
+      <div class="container mx-auto px-6">
+        <h2
+          class="text-3xl sm:text-4xl font-bold text-center mb-12 section-title-underline mx-auto"
+        >
+          Projects
+        </h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="project-card rounded-md overflow-hidden">
+            <img
+              src="Sparkle&Connect.png"
+              alt="Sparkle & Connect"
+              class="w-full"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-3">Sparkle & Connect</h3>
+              <p class="text-gray-400 mb-4">
+                A vibrant, game-fueled singles event I helped bring to
+                life—designed to spark real connections over beer pong, music,
+                and laughter. From concept to execution, I shaped an atmosphere
+                where fun breaks the ice and genuine conversations take center
+                stage.
+              </p>
+              <a
+                href="https://www.datingevents.ch/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="line-drawing-button py-2 px-4 text-sm rounded-sm"
+                >View Project</a
+              >
+            </div>
+          </div>
+          <div class="project-card rounded-md overflow-hidden">
+            <img src="KaskadeApp.png" alt="Kaskade App" class="w-full" />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-3">Kaskade App</h3>
+              <p class="text-gray-400 mb-4">
+                An innovative cross-chain incentivization layer built to solve
+                the liquidity bootstrapping problem. I played a key role in
+                developing a system that helps decentralized ecosystems thrive
+                by making liquidity more accessible and rewards more seamless.
+              </p>
+              <a
+                href="https://app.kaskade.finance/swap/ETH-USDC"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="line-drawing-button py-2 px-4 text-sm rounded-sm"
+                >View Project</a
+              >
+            </div>
+          </div>
+          <div class="project-card rounded-md overflow-hidden">
+            <img src="Spicyfi.png" alt="Spicyfi" class="w-full" />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-3">Spicyfi</h3>
+              <p class="text-gray-400 mb-4">
+                A creative hub for Web3 gamification, on a mission to make
+                decentralized tech fun. I contributed to designing engaging,
+                art-driven blockchain games—infusing user-centric design with a
+                touch of magic to turn cutting-edge technology into delightful
+                play.
+              </p>
+              <a
+                href="https://spicy.fi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="line-drawing-button py-2 px-4 text-sm rounded-sm"
+                >View Project</a
+              >
+            </div>
+          </div>
+          <div class="project-card rounded-md overflow-hidden">
+            <img src="Cryptonaire.png" alt="Cryptonaire" class="w-full" />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-3">Cryptonaire</h3>
+              <p class="text-gray-400 mb-4">
+                A “learn to earn” quiz app that rewards users with real crypto
+                for testing their blockchain knowledge. I helped shape an
+                engaging educational experience—merging gamification with crypto
+                insights to empower both newcomers and seasoned traders.
+              </p>
+              <a
+                href="https://cryptonaire.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="line-drawing-button py-2 px-4 text-sm rounded-sm"
+                >View Project</a
+              >
+            </div>
+          </div>
+          <div class="project-card rounded-md overflow-hidden">
+            <img
+              src="CryptochefsLanding.png"
+              alt="Cryptochefs Landing Page"
+              class="w-full"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-3">Cryptochefs</h3>
+              <p class="text-gray-400 mb-4">
+                A playful DeFi learning platform that teaches crypto through the
+                art of cooking. I helped turn blockchain concepts into
+                interactive, gamified recipes—where users “cook,” stake, and
+                earn AROMA tokens, blending education, strategy, and a dash of
+                delicious fun.
+              </p>
+              <a
+                href="https://cryptochefs.io/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="line-drawing-button py-2 px-4 text-sm rounded-sm"
+                >View Project</a
+              >
+            </div>
+          </div>
+          <div class="project-card rounded-md overflow-hidden">
+            <img
+              src="CryptochefsApp.png"
+              alt="Cryptochefs App"
+              class="w-full"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-3">Cryptochefs App</h3>
+              <p class="text-gray-400 mb-4">
+                A dynamic DeFi game where users cook up recipes, stake tokens,
+                and earn rewards—all while learning crypto fundamentals. I
+                contributed to building an engaging, data-driven experience that
+                blends playful competition with real token incentives and a
+                clear onboarding path for beginners.
+              </p>
+              <a
+                href="https://app.cryptochefs.io/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="line-drawing-button py-2 px-4 text-sm rounded-sm"
+                >View Project</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="content-section py-16 sm:py-24">
+      <div class="container mx-auto px-6 max-w-3xl text-center">
+        <h2
+          class="text-3xl sm:text-4xl font-bold mb-8 section-title-underline mx-auto"
+        >
+          Let's Create Something Cosmic
+        </h2>
+        <p class="text-lg text-gray-300 mb-8">
+          Have an idea, a project, or just want to talk tech and stars? Send me
+          a message!
+        </p>
+
+        <form id="contact-form" class="space-y-6 text-left max-w-xl mx-auto">
+          <div>
+            <label
+              for="name"
+              class="block text-sm font-medium text-gray-300 mb-1"
+              >Name</label
+            >
+            <input
+              type="text"
+              name="name"
+              id="name"
+              required
+              class="form-input"
+            />
+          </div>
+          <div>
+            <label
+              for="email"
+              class="block text-sm font-medium text-gray-300 mb-1"
+              >Email</label
+            >
+            <input
+              type="email"
+              name="email"
+              id="email"
+              required
+              class="form-input"
+            />
+          </div>
+          <div>
+            <label
+              for="message"
+              class="block text-sm font-medium text-gray-300 mb-1"
+              >Message</label
+            >
+            <textarea
+              name="message"
+              id="message"
+              rows="4"
+              required
+              class="form-input form-textarea"
+            ></textarea>
+          </div>
+          <div class="text-center">
+            <button
+              type="submit"
+              id="submit-button"
+              class="line-drawing-button text-lg py-3 px-10 rounded-sm font-medium"
+            >
+              Send Message
+            </button>
+          </div>
+        </form>
+        <div id="form-status-message" class="form-message hidden"></div>
+      </div>
+    </section>
+
+    <footer class="py-10 text-center">
+      <p class="text-gray-500 text-sm">
+        &copy; <span id="currentYear"></span> Natayra Santos. All rights
+        reserved. Zurich, Switzerland.
+      </p>
+    </footer>
+
+    <script>
+      document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
+
+      // EmailJS Integration
+      (function () {
+        emailjs.init({ publicKey: "fm95-hwiWX-TIpccg" }); 
+      })();
+
+      const contactForm = document.getElementById("contact-form");
+      const submitButton = document.getElementById("submit-button");
+      const formStatusMessage = document.getElementById("form-status-message");
+
+      if (contactForm) {
+        contactForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          submitButton.disabled = true;
+          submitButton.textContent = "Sending...";
+          formStatusMessage.classList.add("hidden");
+
+          const serviceID = "service_0inu4cs"; // 
+          const templateID = "template_gu2jr73"; // Replace YOUR_TEMPLATE_ID
+
+          emailjs.sendForm(serviceID, templateID, this).then(
+            () => {
+              submitButton.disabled = false;
+              submitButton.textContent = "Send Message";
+              formStatusMessage.textContent =
+                "Message sent successfully! I'll get back to you soon.";
+              formStatusMessage.classList.remove("hidden", "error");
+              formStatusMessage.classList.add("success");
+              contactForm.reset();
+            },
+            (err) => {
+              submitButton.disabled = false;
+              submitButton.textContent = "Send Message";
+              formStatusMessage.textContent =
+                "Failed to send message. Error: " +
+                JSON.stringify(err.text || err);
+              formStatusMessage.classList.remove("hidden", "success");
+              formStatusMessage.classList.add("error");
+              console.error("EmailJS error:", err);
+            }
+          );
+        });
+      }
+
+      // --- Cosmic Canvas Animation (largely unchanged from previous version) ---
+      const canvas = document.getElementById("cosmic-canvas");
+      const ctx = canvas.getContext("2d");
+      let celestialObjects = [];
+      let nebulaCloudParticles = [];
+      const mouse = { x: null, y: null, radius: 100 };
+      let draggedObject = null;
+
+      let lastScrollY = window.scrollY;
+      let frameScrollDelta = 0;
+      let lastTime = 0;
+      const MAX_PLANETS = 5;
+      const PLANET_SPAWN_CHANCE = 0.002;
+      const PLANET_MIN_SPACING = 60;
+
+      function debounce(func, delay) {
+        let timeout;
+        return function (...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+      }
+
+      function updateMousePosition(event) {
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+      }
+
+      class CelestialObject {
+        constructor(
+          x,
+          y,
+          radius,
+          speedX,
+          speedY,
+          type,
+          colorValue = "#FFFFFF"
+        ) {
+          this.x = x;
+          this.y = y;
+          this.radius = radius;
+          this.speedX = speedX;
+          this.speedY = speedY;
+          this.type = type;
+          this.mass = type === "planet" ? Math.PI * radius * radius : 0.1;
+          this.color = colorValue;
+          this.isDead = false;
+
+          this.rotation = Math.random() * Math.PI * 2;
+          this.rotationSpeed = (Math.random() - 0.5) * 0.0008;
+          this.lineOffset = Math.random() * 20;
+          this.hasRings = type === "planet" && Math.random() < 0.35;
+          this.ringTilt = (Math.random() - 0.5) * (Math.PI / 5);
+          this.numMoons =
+            type === "planet" && radius > 30 && Math.random() < 0.6
+              ? Math.floor(Math.random() * 3) + 1
+              : 0;
+          this.moons = [];
+          if (this.numMoons > 0) {
+            for (let i = 0; i < this.numMoons; i++) {
+              this.moons.push({
+                angle: Math.random() * Math.PI * 2,
+                distance: this.radius + 8 + Math.random() * (radius * 0.3),
+                size: Math.random() * 1.2 + 0.8,
+                speed:
+                  (Math.random() * 0.0035 + 0.001) *
+                  (Math.random() < 0.5 ? 1 : -1),
+              });
+            }
+          }
+
+          this.currentOpacity = 0;
+          this.isFadingIn = type === "planet" || type === "star";
+          this.isFadingOut = false;
+          this.fadeTimer = 0;
+          this.fadeDuration = 2500;
+
+          this.twinkleSpeed = type === "star" ? Math.random() * 0.12 + 0.04 : 0;
+          this.baseRadius =
+            type === "star" ? Math.max(0.4, radius * 0.5) : radius;
+
+          this.isColliding = false;
+          this.collisionEffectTime = 0;
+          this.collisionEffectDuration = 500;
+          this.shockwaveRadius = 0;
+          this.shockwaveMaxRadius = 0;
+
+          this.isBeingDragged = false;
+          this.dragOffsetX = 0;
+          this.dragOffsetY = 0;
+
+          this.life = 0;
+          if (type === "firework") {
+            this.maxLife = (Math.random() * 1.0 + 1.5) * 1000;
+            this.originalSize = radius;
+            this.size = radius;
+            this.currentOpacity = 1;
+            this.isFadingIn = false;
+          } else if (type === "impact") {
+            this.maxLife = (Math.random() * 0.3 + 0.4) * 1000;
+            this.originalSize = radius;
+            this.size = radius;
+            this.currentOpacity = 1;
+            this.isFadingIn = false;
+          } else if (type === "planet") {
+            this.maxLifespan = Math.random() * 25000 + 35000;
+            this.age = 0;
+            this.maxLife = Infinity;
+            this.size = radius;
+          } else {
+            // Stars
+            this.maxLife = Infinity;
+            this.size = radius;
+          }
+          this.parallaxDepth =
+            type === "planet"
+              ? Math.random() * 0.025 + 0.015
+              : type === "star"
+              ? Math.random() * 0.01 + 0.005
+              : 0.002;
+        }
+
+        draw() {
+          if (this.isDead || this.currentOpacity <= 0.001) return;
+          ctx.save();
+          ctx.translate(this.x, this.y);
+
+          let currentRadius = this.radius;
+          let objectOverallOpacity = this.currentOpacity;
+
+          if (this.isColliding) {
+            const progress =
+              this.collisionEffectTime / this.collisionEffectDuration;
+            const pulse = Math.sin(progress * Math.PI);
+            ctx.shadowColor = "rgba(255, 255, 255, 1)";
+            ctx.shadowBlur = pulse * 35;
+
+            if (
+              this.type === "planet" &&
+              this.shockwaveRadius < this.shockwaveMaxRadius
+            ) {
+              const shockwaveOpacity =
+                1 - this.shockwaveRadius / this.shockwaveMaxRadius;
+              ctx.strokeStyle = `rgba(255, 255, 255, ${
+                shockwaveOpacity * 0.8 * objectOverallOpacity
+              })`;
+              ctx.lineWidth =
+                2 * (1 - this.shockwaveRadius / this.shockwaveMaxRadius);
+              if (ctx.lineWidth > 0) {
+                ctx.beginPath();
+                ctx.arc(0, 0, this.shockwaveRadius, 0, Math.PI * 2);
+                ctx.stroke();
+              }
+            }
+          }
+
+          if (this.type === "planet") {
+            ctx.rotate(this.rotation);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${
+              objectOverallOpacity * 0.4
+            })`;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.lineWidth = 0.4;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${
+              objectOverallOpacity * 0.35
+            })`;
+            for (let i = 0; i < 5; i++) {
+              ctx.beginPath();
+              const arcRadius = this.radius * (0.25 + i * 0.12);
+              const startAngle =
+                this.lineOffset +
+                (i * Math.PI) / 2.8 +
+                Math.sin(this.rotation * (i + 1) * 0.3) * 0.3;
+              const endAngle =
+                startAngle + Math.PI * (0.65 + Math.random() * 0.6);
+              ctx.arc(0, 0, arcRadius, startAngle, endAngle);
+              ctx.stroke();
+            }
+            if (this.radius > 28) {
+              ctx.strokeStyle = `rgba(255, 255, 255, ${
+                objectOverallOpacity * 0.3
+              })`;
+              for (let i = 0; i < 7; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * this.radius * 0.75;
+                const craterSize = Math.random() * 1.2 + 0.4;
+                ctx.beginPath();
+                ctx.arc(
+                  Math.cos(angle) * dist,
+                  Math.sin(angle) * dist,
+                  craterSize,
+                  0,
+                  Math.PI * 2
+                );
+                ctx.stroke();
+              }
+            }
+
+            if (this.hasRings) {
+              ctx.save();
+              ctx.rotate(this.ringTilt);
+              ctx.lineWidth = 0.7;
+              ctx.strokeStyle = `rgba(255, 255, 255, ${
+                objectOverallOpacity * 0.5
+              })`;
+              ctx.beginPath();
+              ctx.scale(1, 0.25);
+              ctx.arc(0, 0, this.radius * 1.45, 0, Math.PI * 2);
+              ctx.stroke();
+              if (this.radius > 30) {
+                ctx.beginPath();
+                ctx.arc(0, 0, this.radius * 1.75, 0, Math.PI * 2);
+                ctx.stroke();
+              }
+              ctx.restore();
+            }
+            ctx.rotate(-this.rotation);
+          } else if (this.type === "star") {
+            currentRadius =
+              this.baseRadius +
+              Math.sin(Date.now() * this.twinkleSpeed + this.x + this.y) *
+                (this.baseRadius * 0.8);
+            const starOpacity =
+              this.currentOpacity *
+              (0.25 +
+                Math.sin(Date.now() * this.twinkleSpeed * 2.0 + this.y) * 0.75);
+
+            ctx.strokeStyle = `rgba(255, 255, 255, ${Math.max(
+              0.15,
+              starOpacity
+            )})`;
+            ctx.lineWidth = Math.max(0.25, currentRadius * 0.3);
+
+            const arms = 4;
+            const angleOffset = Math.PI / 4;
+            for (let i = 0; i < arms; i++) {
+              ctx.beginPath();
+              ctx.rotate(Math.PI / arms);
+              ctx.moveTo(-currentRadius, 0);
+              ctx.lineTo(currentRadius, 0);
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.rotate(angleOffset);
+              ctx.moveTo(-currentRadius * 0.7, 0);
+              ctx.lineTo(currentRadius * 0.7, 0);
+              ctx.stroke();
+              ctx.rotate(-angleOffset);
+            }
+          } else if (this.type === "firework") {
+            if (this.size <= 0.01) return;
+
+            ctx.fillStyle = `rgba(255, 255, 255, ${this.currentOpacity})`;
+            ctx.shadowColor = `rgba(255, 255, 255, ${
+              this.currentOpacity * 0.7
+            })`;
+            ctx.shadowBlur = this.size * 2;
+
+            ctx.beginPath();
+            ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          ctx.restore();
+          ctx.shadowBlur = 0;
+
+          if (this.type === "planet" && this.numMoons > 0) {
+            this.moons.forEach((moon) => {
+              const moonX = this.x + Math.cos(moon.angle) * moon.distance;
+              const moonY = this.y + Math.sin(moon.angle) * moon.distance;
+              ctx.fillStyle = `rgba(220, 220, 220, ${
+                0.7 * this.currentOpacity
+              })`;
+              ctx.beginPath();
+              ctx.arc(moonX, moonY, moon.size, 0, Math.PI * 2);
+              ctx.fill();
+            });
+          }
+        }
+
+        update(deltaTime) {
+          if (this.isDead) return;
+
+          if (this.isFadingIn) {
+            this.fadeTimer += deltaTime;
+            this.currentOpacity = Math.min(
+              1,
+              this.fadeTimer / this.fadeDuration
+            );
+            if (this.fadeTimer >= this.fadeDuration) {
+              this.isFadingIn = false;
+              this.currentOpacity =
+                this.type === "star" ? this.opacity || 1 : 1; // Ensure opacity exists for stars
+              this.fadeTimer = 0;
+            }
+          } else if (this.isFadingOut) {
+            this.fadeTimer += deltaTime;
+            this.currentOpacity = Math.max(
+              0,
+              (this.type === "star" ? this.opacity || 1 : 1) -
+                this.fadeTimer / this.fadeDuration
+            );
+            if (
+              this.fadeTimer >= this.fadeDuration ||
+              this.currentOpacity <= 0.001
+            ) {
+              this.isDead = true;
+              this.currentOpacity = 0;
+              return;
+            }
+          } else if (this.type === "planet") {
+            this.age += deltaTime;
+            if (this.age >= this.maxLifespan) {
+              this.isFadingOut = true;
+              this.fadeTimer = 0;
+            }
+            if (!this.isFadingIn && !this.isFadingOut) this.currentOpacity = 1;
+          } else if (this.type === "star") {
+            if (!this.isFadingIn) this.currentOpacity = this.opacity || 1; // Ensure opacity exists
+          }
+
+          if (frameScrollDelta !== 0 && !this.isBeingDragged) {
+            if (Math.abs(frameScrollDelta) < window.innerHeight * 0.8) {
+              if (
+                (frameScrollDelta < 0 && window.scrollY > 0) ||
+                (frameScrollDelta > 0 &&
+                  window.scrollY + window.innerHeight <
+                    document.body.scrollHeight - 1)
+              ) {
+                this.y -= frameScrollDelta * this.parallaxDepth;
+              }
+            }
+          }
+
+          if (this.isBeingDragged) {
+            if (mouse.x !== null && mouse.y !== null) {
+              this.x = mouse.x - this.dragOffsetX;
+              this.y = mouse.y - this.dragOffsetY;
+              this.x = Math.max(
+                this.radius,
+                Math.min(this.x, canvas.width - this.radius)
+              );
+              this.y = Math.max(
+                this.radius,
+                Math.min(this.y, canvas.height - this.radius)
+              );
+            }
+            return;
+          }
+
+          this.x += this.speedX * deltaTime * 0.06;
+          this.y += this.speedY * deltaTime * 0.06;
+
+          if (this.type === "planet") {
+            this.rotation += this.rotationSpeed * deltaTime * 0.06;
+            this.moons.forEach((moon) => {
+              moon.angle += moon.speed * deltaTime * 0.06;
+            });
+          }
+
+          const checkRadius =
+            this.type === "planet" && this.hasRings
+              ? this.radius * 1.8
+              : this.radius;
+          if (this.x - checkRadius < 0 || this.x + checkRadius > canvas.width) {
+            this.speedX *= -1;
+            this.x = Math.max(
+              checkRadius,
+              Math.min(this.x, canvas.width - checkRadius)
+            );
+          }
+          if (
+            this.y - checkRadius < 0 ||
+            this.y + checkRadius > canvas.height
+          ) {
+            this.speedY *= -1;
+            this.y = Math.max(
+              checkRadius,
+              Math.min(this.y, canvas.height - checkRadius)
+            );
+          }
+
+          const returnNudgeFactor = 0.008;
+          const offScreenBuffer = this.radius;
+
+          if (this.y < -offScreenBuffer) {
+            this.speedY += returnNudgeFactor * deltaTime * 0.06;
+          } else if (this.y > canvas.height + offScreenBuffer) {
+            this.speedY -= returnNudgeFactor * deltaTime * 0.06;
+          }
+          if (this.x < -offScreenBuffer) {
+            this.speedX += returnNudgeFactor * deltaTime * 0.06;
+          } else if (this.x > canvas.width + offScreenBuffer) {
+            this.speedX -= returnNudgeFactor * deltaTime * 0.06;
+          }
+
+          if (mouse.x !== null && mouse.y !== null && !this.isBeingDragged) {
+            const dx = this.x - mouse.x;
+            const dy = this.y - mouse.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < mouse.radius + this.radius) {
+              const angle = Math.atan2(dy, dx);
+              const force =
+                (mouse.radius + this.radius - distance) /
+                (mouse.radius + this.radius);
+              this.x += Math.cos(angle) * force * 1.2;
+              this.y += Math.sin(angle) * force * 1.2;
+            }
+          }
+
+          if (this.isColliding) {
+            this.collisionEffectTime += deltaTime;
+            if (this.type === "planet") {
+              this.shockwaveRadius += deltaTime * 0.25;
+            }
+            if (this.collisionEffectTime >= this.collisionEffectDuration) {
+              this.isColliding = false;
+              this.collisionEffectTime = 0;
+              this.shockwaveRadius = 0;
+            }
+          }
+          if (this.type === "firework" || this.type === "impact") {
+            this.life += deltaTime;
+            this.size *= 0.99;
+            this.speedY += 0.02 * (deltaTime / 16.67);
+            this.currentOpacity = Math.max(0, 1 - this.life / this.maxLife);
+
+            if (this.life >= this.maxLife || this.size < 0.1) {
+              this.size = 0;
+              this.isDead = true;
+            }
+          }
+        }
+
+        startCollisionEffect() {
+          this.isColliding = true;
+          this.collisionEffectTime = 0;
+          if (this.type === "planet") {
+            this.shockwaveRadius = this.radius;
+            this.shockwaveMaxRadius = this.radius * 3;
+          }
+
+          const numImpactParticles = 30 + Math.floor(Math.random() * 20);
+          for (let i = 0; i < numImpactParticles; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 1.8 + 0.8;
+            const pSpeedX = Math.cos(angle) * speed;
+            const pSpeedY = Math.sin(angle) * speed;
+            const pSize = Math.random() * 1.2 + 0.4;
+            celestialObjects.push(
+              new ImpactParticle(this.x, this.y, pSize, pSpeedX, pSpeedY)
+            );
+          }
+        }
+      }
+
+      class ImpactParticle extends CelestialObject {
+        constructor(x, y, radius, speedX, speedY) {
+          super(x, y, radius, speedX, speedY, "impact", "#FFFFFF");
+          this.maxLife = (Math.random() * 0.35 + 0.3) * 1000;
+          this.life = 0;
+          this.size = radius;
+        }
+
+        draw() {
+          if (this.isDead) return;
+          const progress = this.life / this.maxLife;
+          if (progress >= 1 || this.size <= 0.1) {
+            this.isDead = true;
+            return;
+          }
+
+          ctx.strokeStyle = `rgba(255, 255, 255, ${1 - progress * progress})`;
+          ctx.lineWidth = Math.max(0.1, this.size * (1 - progress));
+          if (ctx.lineWidth <= 0) {
+            this.isDead = true;
+            return;
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(this.x - this.speedX * 2.0, this.y - this.speedY * 2.0);
+          ctx.lineTo(this.x, this.y);
+          ctx.stroke();
+        }
+
+        update(deltaTime) {
+          if (this.isDead) return;
+          this.life += deltaTime;
+          if (this.life >= this.maxLife) {
+            this.isDead = true;
+            this.size = 0;
+            return;
+          }
+          this.x += this.speedX * deltaTime * 0.06;
+          this.y += this.speedY * deltaTime * 0.06;
+          this.speedX *= 0.95;
+          this.speedY *= 0.95;
+          this.size *= 0.98;
+          if (this.size < 0.1) {
+            this.isDead = true;
+            this.size = 0;
+          }
+        }
+      }
+
+      class NebulaCloudParticle {
+        constructor(x, y) {
+          this.x = x;
+          this.y = y;
+          this.size = Math.random() * 200 + 100;
+          this.speedX = (Math.random() - 0.5) * 0.001;
+          this.speedY = (Math.random() - 0.5) * 0.001;
+          const nebulaColors = [
+            "rgba(80, 80, 200, 0.15)",
+            "rgba(120, 70, 180, 0.12)",
+            "rgba(70, 130, 130, 0.13)",
+            "rgba(150, 150, 150, 0.18)",
+            "rgba(180, 90, 130, 0.11)",
+          ];
+          this.color =
+            nebulaColors[Math.floor(Math.random() * nebulaColors.length)];
+          this.baseOpacity = Math.random() * 0.06 + 0.08;
+          this.blurAmount = Math.random() * 5 + 6;
+          this.life = Math.random() * 80000;
+          this.maxLife = Math.random() * 40000 + 40000;
+          this.angle = Math.random() * Math.PI * 2;
+          this.rotationSpeed = (Math.random() - 0.5) * 0.000002;
+          this.shimmerSpeed = Math.random() * 0.0000003 + 0.00000005;
+          this.shimmerPhaseOffset = Math.random() * Math.PI * 2;
+
+          this.numLayers = 1 + Math.floor(Math.random() * 2);
+          this.layers = [];
+          for (let i = 0; i < this.numLayers; i++) {
+            this.layers.push({
+              sizeFactor: 1 - i * 0.1,
+              offsetX: (Math.random() - 0.5) * this.size * 0.05,
+              offsetY: (Math.random() - 0.5) * this.size * 0.05,
+              ellipseYRadiusFactor: Math.random() * 0.2 + 0.65,
+              ellipseStartAngle: Math.random() * Math.PI * 2,
+            });
+          }
+          this.parallaxDepth = Math.random() * 0.008 + 0.002;
+        }
+
+        draw() {
+          ctx.save();
+          const shimmer =
+            Math.sin(Date.now() * this.shimmerSpeed + this.shimmerPhaseOffset) *
+            0.005;
+          ctx.globalAlpha = Math.max(0.05, this.baseOpacity + shimmer);
+
+          ctx.filter = `blur(${this.blurAmount}px)`;
+
+          ctx.translate(this.x, this.y);
+          ctx.rotate(this.angle);
+
+          this.layers.forEach((layer) => {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.ellipse(
+              layer.offsetX,
+              layer.offsetY,
+              this.size * layer.sizeFactor,
+              this.size * layer.sizeFactor * layer.ellipseYRadiusFactor,
+              layer.ellipseStartAngle,
+              0,
+              Math.PI * 2
+            );
+            ctx.fill();
+          });
+
+          ctx.filter = "none";
+          ctx.globalAlpha = 1.0;
+          ctx.restore();
+        }
+
+        update(deltaTime) {
+          if (frameScrollDelta !== 0) {
+            if (
+              (frameScrollDelta < 0 && window.scrollY > 0) ||
+              (frameScrollDelta > 0 &&
+                window.scrollY + window.innerHeight <
+                  document.body.scrollHeight - 1)
+            ) {
+              this.y -= frameScrollDelta * this.parallaxDepth;
+            }
+          }
+
+          this.life += deltaTime;
+          if (this.life > this.maxLife) {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.life = 0;
+            this.size = Math.random() * 200 + 100;
+          }
+
+          this.x += this.speedX * deltaTime * 0.06;
+          this.y += this.speedY * deltaTime * 0.06;
+          this.angle += this.rotationSpeed * deltaTime * 0.06;
+
+          const margin = this.size;
+          if (this.x < -margin) this.x = canvas.width + margin;
+          if (this.x > canvas.width + margin) this.x = -margin;
+          if (this.y < -margin) this.y = canvas.height + margin;
+          if (this.y > canvas.height + margin) this.y = -margin;
+        }
+      }
+
+      function trySpawnPlanet() {
+        const currentPlanets = celestialObjects.filter(
+          (obj) => obj.type === "planet" && !obj.isFadingOut && !obj.isDead
+        ).length;
+        if (
+          currentPlanets < MAX_PLANETS &&
+          Math.random() < PLANET_SPAWN_CHANCE
+        ) {
+          const radius = Math.random() * 25 + 30;
+          let x, y, validPosition;
+          let attempts = 0;
+          const maxAttempts = 50;
+          do {
+            validPosition = true;
+            x = Math.random() * (canvas.width - radius * 4) + radius * 2;
+            y = Math.random() * (canvas.height - radius * 4) + radius * 2;
+            for (let j = 0; j < celestialObjects.length; j++) {
+              if (
+                celestialObjects[j].type === "planet" &&
+                !celestialObjects[j].isDead
+              ) {
+                const dx = x - celestialObjects[j].x;
+                const dy = y - celestialObjects[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (
+                  distance <
+                  radius + celestialObjects[j].radius + PLANET_MIN_SPACING
+                ) {
+                  validPosition = false;
+                  break;
+                }
+              }
+            }
+            attempts++;
+          } while (!validPosition && attempts < maxAttempts);
+
+          if (validPosition) {
+            const speedX = (Math.random() - 0.5) * 0.15;
+            const speedY = (Math.random() - 0.5) * 0.15;
+            const newPlanet = new CelestialObject(
+              x,
+              y,
+              radius,
+              speedX,
+              speedY,
+              "planet"
+            );
+            celestialObjects.push(newPlanet);
+          }
+        }
+      }
+
+      function initCelestialObjects() {
+        celestialObjects = [];
+        nebulaCloudParticles = [];
+        const numInitialPlanets = 3;
+        const numStars = 130 + Math.floor(Math.random() * 70);
+        const numNebulaClouds = 25;
+
+        for (let i = 0; i < numInitialPlanets; i++) {
+          const radius = Math.random() * 25 + 30;
+          let x, y, validPosition;
+          let attempts = 0;
+          const maxAttempts = 50;
+          do {
+            validPosition = true;
+            x = Math.random() * (canvas.width - radius * 4) + radius * 2;
+            y = Math.random() * (canvas.height - radius * 4) + radius * 2;
+            for (let j = 0; j < celestialObjects.length; j++) {
+              if (celestialObjects[j].type === "planet") {
+                const dx = x - celestialObjects[j].x;
+                const dy = y - celestialObjects[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (
+                  distance <
+                  radius + celestialObjects[j].radius + PLANET_MIN_SPACING
+                ) {
+                  validPosition = false;
+                  break;
+                }
+              }
+            }
+            attempts++;
+          } while (!validPosition && attempts < maxAttempts);
+
+          if (validPosition) {
+            const speedX = (Math.random() - 0.5) * 0.15;
+            const speedY = (Math.random() - 0.5) * 0.15;
+            celestialObjects.push(
+              new CelestialObject(x, y, radius, speedX, speedY, "planet")
+            );
+          }
+        }
+
+        for (let i = 0; i < numStars; i++) {
+          const radius = Math.random() * 1.0 + 0.3;
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
+          const speedX = (Math.random() - 0.5) * 0.05;
+          const speedY = (Math.random() - 0.5) * 0.05;
+          const star = new CelestialObject(
+            x,
+            y,
+            radius,
+            speedX,
+            speedY,
+            "star"
+          );
+          star.opacity = Math.random() * 0.6 + 0.2; // Assign initial opacity for stars
+          star.currentOpacity = 0; // Start faded out for fade-in effect
+          star.isFadingIn = true; // Ensure stars fade in
+          celestialObjects.push(star);
+        }
+
+        for (let i = 0; i < numNebulaClouds; i++) {
+          nebulaCloudParticles.push(
+            new NebulaCloudParticle(
+              Math.random() * canvas.width,
+              Math.random() * canvas.height
+            )
+          );
+        }
+      }
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initCelestialObjects();
+      }
+
+      function createFireworks(x, y) {
+        const numberOfSparks = 15 + Math.floor(Math.random() * 10);
+        for (let i = 0; i < numberOfSparks; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 2.5 + 1.0;
+          const speedX_fw = Math.cos(angle) * speed;
+          const speedY_fw = Math.sin(angle) * speed - Math.random() * 0.5;
+          const size_fw = Math.random() * 1.5 + 0.5;
+          celestialObjects.push(
+            new CelestialObject(
+              x,
+              y,
+              size_fw,
+              speedX_fw,
+              speedY_fw,
+              "firework",
+              "#FFFFFF"
+            )
+          );
+        }
+      }
+
+      function handleCollisions() {
+        const planets = celestialObjects.filter(
+          (obj) =>
+            obj.type === "planet" &&
+            !obj.isDead &&
+            !obj.isFadingOut &&
+            !obj.isFadingIn
+        );
+        for (let i = 0; i < planets.length; i++) {
+          for (let j = i + 1; j < planets.length; j++) {
+            const p1 = planets[i];
+            const p2 = planets[j];
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < p1.radius + p2.radius) {
+              if (!p1.isColliding) p1.startCollisionEffect();
+              if (!p2.isColliding) p2.startCollisionEffect();
+
+              const nx = dx / distance;
+              const ny = dy / distance;
+              const dvx = p1.speedX - p2.speedX;
+              const dvy = p1.speedY - p2.speedY;
+              const dotProduct = dvx * nx + dvy * ny;
+
+              if (dotProduct < 0) {
+                const impulse = (1.3 * dotProduct) / (p1.mass + p2.mass);
+
+                p1.speedX -= impulse * p2.mass * nx;
+                p1.speedY -= impulse * p2.mass * ny;
+                p2.speedX += impulse * p1.mass * nx;
+                p2.speedY += impulse * p1.mass * ny;
+
+                const overlap = 0.5 * (p1.radius + p2.radius - distance + 2.0);
+                p1.x -= overlap * nx;
+                p1.y -= overlap * ny;
+                p2.x += overlap * nx;
+                p2.y += overlap * ny;
+              }
+            }
+          }
+        }
+      }
+
+      function animate(timestamp = 0) {
+        const deltaTime = timestamp - lastTime;
+        lastTime = timestamp;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        nebulaCloudParticles.forEach((dust) => {
+          dust.update(deltaTime || 16.67);
+          dust.draw();
+        });
+
+        celestialObjects = celestialObjects.filter((obj) => !obj.isDead);
+        trySpawnPlanet();
+
+        celestialObjects.forEach((obj) => {
+          obj.update(deltaTime || 16.67);
+          obj.draw();
+        });
+
+        handleCollisions();
+
+        if (mouse.x !== null && mouse.y !== null) {
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+          ctx.lineWidth = 0.7;
+          ctx.beginPath();
+          ctx.arc(mouse.x, mouse.y, 6, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      const debouncedResizeCanvas = debounce(resizeCanvas, 250);
+      window.addEventListener("resize", debouncedResizeCanvas);
+      window.addEventListener("mousemove", updateMousePosition);
+      window.addEventListener("mouseleave", () => {
+        mouse.x = null;
+        mouse.y = null;
+        if (draggedObject) {
+          draggedObject.isBeingDragged = false;
+          draggedObject = null;
+        }
+      });
+
+      document.body.addEventListener("mousedown", (event) => {
+        if (
+          event.target.closest(
+            "button, a, input, textarea, .project-card, .line-drawing-button, form"
+          )
+        )
+          return;
+
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+        for (let i = celestialObjects.length - 1; i >= 0; i--) {
+          const obj = celestialObjects[i];
+          if (obj.type === "planet" && !obj.isFadingIn && !obj.isFadingOut) {
+            const dx = mouse.x - obj.x;
+            const dy = mouse.y - obj.y;
+            if (Math.sqrt(dx * dx + dy * dy) < obj.radius) {
+              obj.isBeingDragged = true;
+              draggedObject = obj;
+              obj.dragOffsetX = mouse.x - obj.x;
+              obj.dragOffsetY = mouse.y - obj.y;
+              obj.speedX = 0;
+              obj.speedY = 0;
+              break;
+            }
+          }
+        }
+      });
+
+      window.addEventListener("mouseup", () => {
+        if (draggedObject) {
+          draggedObject.isBeingDragged = false;
+          draggedObject = null;
+        }
+      });
+
+      document.body.addEventListener(
+        "touchstart",
+        (event) => {
+          if (
+            event.target.closest(
+              "button, a, input, textarea, .project-card, .line-drawing-button, form"
+            )
+          )
+            return;
+
+          if (event.touches.length > 0) {
+            mouse.x = event.touches[0].clientX;
+            mouse.y = event.touches[0].clientY;
+
+            for (let i = celestialObjects.length - 1; i >= 0; i--) {
+              const obj = celestialObjects[i];
+              if (
+                obj.type === "planet" &&
+                !obj.isFadingIn &&
+                !obj.isFadingOut
+              ) {
+                const dx = mouse.x - obj.x;
+                const dy = mouse.y - obj.y;
+                if (Math.sqrt(dx * dx + dy * dy) < obj.radius + 20) {
+                  obj.isBeingDragged = true;
+                  draggedObject = obj;
+                  obj.dragOffsetX = mouse.x - obj.x;
+                  obj.dragOffsetY = mouse.y - obj.y;
+                  obj.speedX = 0;
+                  obj.speedY = 0;
+                  break;
+                }
+              }
+            }
+          }
+        },
+        { passive: true }
+      );
+
+      canvas.addEventListener(
+        "touchstart",
+        (event) => {
+          if (event.touches.length > 0) {
+            mouse.x = event.touches[0].clientX;
+            mouse.y = event.touches[0].clientY;
+            let isDraggingPlanet = false;
+            for (let i = celestialObjects.length - 1; i >= 0; i--) {
+              const obj = celestialObjects[i];
+              if (
+                obj.type === "planet" &&
+                !obj.isFadingIn &&
+                !obj.isFadingOut
+              ) {
+                const dx = mouse.x - obj.x;
+                const dy = mouse.y - obj.y;
+                if (Math.sqrt(dx * dx + dy * dy) < obj.radius + 20) {
+                  obj.isBeingDragged = true;
+                  draggedObject = obj;
+                  obj.dragOffsetX = mouse.x - obj.x;
+                  obj.dragOffsetY = mouse.y - obj.y;
+                  obj.speedX = 0;
+                  obj.speedY = 0;
+                  isDraggingPlanet = true;
+                  break;
+                }
+              }
+            }
+            if (isDraggingPlanet) {
+              event.preventDefault();
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      canvas.addEventListener(
+        "touchmove",
+        (event) => {
+          if (event.touches.length > 0) {
+            mouse.x = event.touches[0].clientX;
+            mouse.y = event.touches[0].clientY;
+            if (draggedObject) {
+              event.preventDefault();
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      canvas.addEventListener("touchend", () => {
+        mouse.x = null;
+        mouse.y = null;
+        if (draggedObject) {
+          draggedObject.isBeingDragged = false;
+          draggedObject = null;
+        }
+      });
+      canvas.addEventListener("touchcancel", () => {
+        mouse.x = null;
+        mouse.y = null;
+        if (draggedObject) {
+          draggedObject.isBeingDragged = false;
+          draggedObject = null;
+        }
+      });
+
+      window.addEventListener(
+        "scroll",
+        () => {
+          const currentScrollY = window.scrollY;
+          frameScrollDelta = currentScrollY - lastScrollY;
+          lastScrollY = currentScrollY;
+        },
+        { passive: true }
+      );
+
+      document.body.addEventListener("click", (event) => {
+        if (draggedObject && draggedObject.isBeingDragged) {
+          setTimeout(() => {
+            if (!draggedObject) {
+              triggerFireworksOnClick(event);
+            }
+          }, 10);
+          return;
+        }
+        triggerFireworksOnClick(event);
+      });
+
+      function triggerFireworksOnClick(event) {
+        let targetElement = event.target;
+        let isInteractive = false;
+        while (targetElement != null) {
+          if (
+            targetElement.matches(
+              "button, a, input, textarea, .project-card, .line-drawing-button, form, label"
+            )
+          ) {
+            isInteractive = true;
+            break;
+          }
+          targetElement = targetElement.parentElement;
+        }
+        if (isInteractive) return;
+
+        const clickX = event.clientX;
+        const clickY = event.clientY;
+        createFireworks(clickX, clickY);
+      }
+
+      initCelestialObjects();
+      resizeCanvas();
+      animate();
+    </script>
   </body>
 </html>
